@@ -69,8 +69,12 @@ class Folder(db.Model):
         return '{} : {}'.format(self.author.name, self.name)
 
     @classmethod
-    def is_folder_exists(cls, name):
+    def foldername_exists(cls, name):
         return cls.query.filter_by(name=name).first()
+
+    @classmethod
+    def get_one_id(cls, id):
+        return cls.query.filter_by(id=id).first()
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -81,3 +85,7 @@ class Note(db.Model):
 
     def __repr__(self):
         return '{}: {} => {}'.format(self.folder.author.name, self.folder.name, self.body)
+
+    @classmethod
+    def find_by_title(cls, title):
+        return cls.query.filter_by(title=title).first()

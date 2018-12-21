@@ -35,6 +35,7 @@ class FolderList(Resource):
 @api.route('/<id>')
 class Folder(Resource):
 
+    @jwt_required
     @api.marshal_with(s.folder_notes)
     @api.doc('See all notes in a folder',
              params={'id': 'Folder ID'},
@@ -43,23 +44,30 @@ class Folder(Resource):
         data = h.see_folder_notes(id)
         return data
 
-    @api.expect(s.edit_folder)
+    @jwt_required
     @api.marshal_with(s.general_message)
     @api.doc(description='Edit folder attribute',
              params={'id': 'Folder ID'},
-             parser=authorization)
+             parser=authorization,
+             body=s.edit_folder)
     def put(self, id):
-        pass
+        status = h.edit_folder(id, request.get_json())
+        return status
 
+    @jwt_required
     @api.marshal_with(s.general_message)
     @api.doc(description='Delete a folder, along with its contents',
              params={'id': 'Folder ID'},
              parser=authorization)
-    def delete(self):
-        pass
+    def delete(self, id):
+        status = h.delete_folder(id)
+        return status
 
-    @api.doc(description='Post a new note')
-    @api.expect(s.new_note)
+    @jwt_required
     @api.marshal_with(s.general_message)
-    def post(self):
-        pass
+    @api.doc(description='Post a new note',
+            parser=authorization,
+            body=s.new_note)
+    def post(self, id):
+        status = h.post_notes(id, request.get_json())
+        return status

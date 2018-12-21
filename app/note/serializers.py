@@ -22,12 +22,3 @@ note = api.model('Read a note',
                 'count': fields.Integer(description='Notes in folder')
                 }
                 )
-
-# Posting a new note
-new_note = api.model('Post a new note',
-                     {
-                         'title': fields.String(description='Note\'s Title'),
-                         'body': fields.String(description='Note\'s content'),
-                         'folder': fields.Integer(description='Folder\'s ID')
-                     }
-)

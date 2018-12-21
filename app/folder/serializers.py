@@ -13,9 +13,10 @@ general_message = api.model('General Message',
 # Get User's folder list
 folder_list= api.model( 'Folders List',
                        {
-                            'id' : fields.String(description='Link to folder. Based on ID'),
+                            'id' : fields.String(),
                             'url': fields.Url('api.folder_folder', absolute=True),
-                            'name' : fields.String(description="Folder's name"),
+                            'name' : fields.String(),
+                            'description': fields.String(),
                             'privacy': fields.String(description="Folder's privacy"),
                             'author': fields.String(description='Folder\'s author'),
                             'created': fields.DateTime(description='Date Created'),
@@ -62,6 +63,5 @@ new_note = api.model('Post a new note',
                      {
                          'title': fields.String(description='Note\'s Title'),
                          'body': fields.String(description='Note\'s content'),
-                         'folder': fields.Integer(description='Folder\'s ID')
                      }
 )
