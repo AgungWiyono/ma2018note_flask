@@ -14,11 +14,18 @@ general_message = api.model('General Message',
 # Read a note
 note = api.model('Read a note',
                 {
-                'id' : fields.String(description='Link to folder. Based on ID'),
-                'name' : fields.String(description="Folder's name"),
-                'privacy': fields.String(description="Folder's privacy"),
-                'author': fields.String(description='Folder\'s author'),
-                'created': fields.DateTime(description='Date Created'),
-                'count': fields.Integer(description='Notes in folder')
+                'id' : fields.String(),
+                'title' : fields.String(),
+                'privacy': fields.String(),
+                'author': fields.String(),
+                'created': fields.DateTime()
                 }
                 )
+
+# Note Edit Input
+edit_note = api.model('Edit Note',
+                     {
+                         'title': fields.String(),
+                         'body': fields.String,
+                     }
+                     )
