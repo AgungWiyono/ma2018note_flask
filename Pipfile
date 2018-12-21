@@ -10,6 +10,9 @@ flask-restplus = "*"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
 python-dotenv = "*"
+flask-jwt-extended = "*"
+passlib = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.6"
