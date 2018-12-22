@@ -13,6 +13,7 @@ python-dotenv = "*"
 flask-jwt-extended = "*"
 passlib = "*"
 gunicorn = "*"
+flask-admin = "*"
 
 [requires]
 python_version = "3.6"

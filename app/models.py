@@ -10,8 +10,8 @@ def to_dict(model):
             for c in inspect(model).mapper.column_attrs}
 
 followers = db.Table('followers',
-                     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
-                     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+                     db.Column('followed_id', db.Integer, db.ForeignKey('user.id')),
+                     db.Column('follower_id', db.Integer, db.ForeignKey('user.id'))
                     )
 
 
@@ -20,7 +20,7 @@ class User(db.Model):
     name = db.Column(db.String(20), nullable=False)
     folders = db.relationship('Folder', backref='author', lazy='dynamic')
     password = db.Column(db.String())
-    follow = db.relationship(
+    followed = db.relationship(
         'User', secondary = followers,
         primaryjoin = (followers.c.followed_id == id),
         secondaryjoin = (followers.c.follower_id == id),
@@ -31,8 +31,15 @@ class User(db.Model):
         return self.name
 
     def follow(self, user):
-        self.followed.append(user)
+        self.follower.append(user)
         db.session.commit()
+
+    def get_all_folders(self):
+        contact = Folder.query.join(
+            followers, (followers.c.follower_id==Folder.user_id)).filter(
+                followers.c.followed_id==self.id)
+        own = Folder.query.filter_by(user_id=self.id)
+        return contact.union(own).order_by(Folder.created.desc())
 
     @classmethod
     def find_by_username(cls, name):

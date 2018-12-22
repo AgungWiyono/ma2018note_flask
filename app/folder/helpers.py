@@ -15,8 +15,7 @@ not_authorized = lambda x: abort(401, error_401) if x!=get_jwt_identity()\
                     else None
 
 def folder_list():
-    datas = User.query.filter_by(name=get_jwt_identity()).first().folders
-    result =[]
+    datas = User.query.filter_by(name=get_jwt_identity()).first().get_all_folders()
     for data in datas:
         data_dict = to_dict(data)
         data_dict['privacy'] = data.privacy.name
