@@ -15,9 +15,15 @@ not_authorized = lambda x: abort(401, error_401) if x!=get_jwt_identity()\
 
 def read_note(id):
     note = Note.find_by_id(id)
-
     not_exists(note)
-    not_authorized(note.folder.author.name)
+
+    owner = note.folder.author
+    reader = User.find_by_username(get_jwt_identity())
+
+    if note.folder.privacy.name=='Secret':
+        not_authorized(note.folder.author.name)
+    if note.folder.privacy.name=='Contact' and owner not in reader.followed:
+        abort(401, 'You don\'t have access to this file')
 
     note_dict = to_dict(note)
     note_dict['privacy'] = note.folder.privacy.name

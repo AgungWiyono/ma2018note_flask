@@ -15,7 +15,10 @@ not_authorized = lambda x: abort(401, error_401) if x!=get_jwt_identity()\
                     else None
 
 def folder_list():
-    datas = User.query.filter_by(name=get_jwt_identity()).first().get_all_folders()
+    query = User.query.filter_by(name=get_jwt_identity()).first().get_all_folders()
+    datas = [i for i in query if i.privacy_id!=3 ]
+
+    result = []
     for data in datas:
         data_dict = to_dict(data)
         data_dict['privacy'] = data.privacy.name
@@ -40,9 +43,15 @@ def folder_post(data):
 
 def see_folder_notes(id):
     folder = Folder.get_one_id(id)
-
     not_exists(folder)
-    not_authorized(folder.author.name)
+
+    owner = folder.author
+    reader = User.find_by_username(get_jwt_identity())
+
+    if folder.privacy.name=='Secret':
+        not_authorized(folder.author.name)
+    elif folder.privacy.name=='Contact' and owner not in reader.followed:
+        abort(401, 'You don\'t have access to this folder')
 
     result =[]
     for note in folder.notes:

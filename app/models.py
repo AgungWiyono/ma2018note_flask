@@ -41,6 +41,9 @@ class User(db.Model):
         own = Folder.query.filter_by(user_id=self.id)
         return contact.union(own).order_by(Folder.created.desc())
 
+    def is_following(self, target):
+        return target in self.followed
+
     @classmethod
     def find_by_username(cls, name):
         return cls.query.filter_by(name=name).first()
